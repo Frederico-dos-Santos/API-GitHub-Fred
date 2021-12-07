@@ -45,15 +45,17 @@
     <div class="container">
         <br><br>
         <h1 style="text-align:center;">Pesquisa de usuário GitHub</h1>
-        <form id="searchForm" autocomplete="off">
+        <form id="gitHubForm" autocomplete="off">
             <div class="form-group">
-                <input type="text" class="form-control" id="search" placeholder="Insira seu usuário" required>
+                <input type="text" class="form-control" id="usernameInput" placeholder="Insira seu usuário" required>
             </div>
             <div class="form-group">
-                <button class="btn btn-danger btn-block" id="botao">Pesquisar usuário</button>
+                <button class="btn btn-danger btn-block" id="submit">Pesquisar usuário</button>
             </div>
             </form>
-            <div class="container-fluid mt-3" id="result"></div>
+            <ul id="userRepos" class="list-group mx-auto mb-5" style="width: 500px">
+
+            </ul>
     </div>
     <script src="main.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
