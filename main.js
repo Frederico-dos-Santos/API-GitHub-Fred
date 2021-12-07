@@ -53,88 +53,70 @@ function abreRepos() {
 
 const gitHubForm = document.getElementById('gitHubForm');
 
-// Listen for submissions on GitHub username input form
+
 gitHubForm.addEventListener('submit', (e) => {
-    
-    // Prevent default form submission action
-    e.preventDefault();
 
-    // Get the GitHub username input field on the DOM
-    let usernameInput = document.getElementById('usernameInput');
 
-    // Get the value of the GitHub username input field
-    let gitHubUsername = usernameInput.value;          
+  e.preventDefault();
 
-    // Run GitHub API function, passing in the GitHub username
-    requestUserRepos(gitHubUsername);
+
+  let usernameInput = document.getElementById('usernameInput');
+
+
+  let gitHubUsername = usernameInput.value;
+
+
+  requestUser(gitHubUsername);
 
 })
 
 
-function requestUserRepos(username){
-    
-    // Create new XMLHttpRequest object
-    const xhr = new XMLHttpRequest();
-    
-    // GitHub endpoint, dynamically passing in specified username
-    const url = `https://api.github.com/users/${username}`;
-   
-    // Open a new connection, using a GET request via URL endpoint
-    // Providing 3 arguments (GET/POST, The URL, Async True/False)
-    xhr.open('GET', url, true);
-    
-    // When request is received
-    // Process it here
-    xhr.onload = function () {
-    
-        // Parse API data into JSON
-        const data = JSON.parse(this.response);
-        
-        // Loop over each object in data array
+function requestUser(username) {
 
-            // Get the ul with id of of userRepos
-            let ul = document.getElementById('userRepos');
-    
-            // Create variable that will create li's to be added to ul
-            let li = document.createElement('li');
-            
-            // Add Bootstrap list item class to each li
-            li.classList.add('list-group-item')
-        
-            // Create the html markup for each li
-            li.innerHTML = (`<div class="card mb-3" style="max-width: 540px; id="idPerfil">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="${data.avatar_url}" class="img-fluid rounded-start" id ="imagem1" alt="...">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">${data.name}<br>(${data.login})</h5>
-                  <p class="card-text">${data.bio}</p>
-                  <p class="card-text">${data.followers} seguidores</p>
-                  <a href="${data.html_url}" target="_blank" class="btn btn-primary">Perfil no GitHub</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          </div>`);
-            
-            // Append each li to the ul
-            ul.appendChild(li);
-        
+
+  const xhr = new XMLHttpRequest();
+
+
+  const url = `https://api.github.com/users/${username}/repos`;
+
+
+  xhr.open('GET', url, true);
+
+
+  xhr.onload = function () {
+
+
+    const data = JSON.parse(this.response);
+
+    for (let i in data) {
+      let ul = document.getElementById('userRepos');
+
+
+      let li = document.createElement('li');
+
+
+      li.classList.add('list-group-item')
+
+
+      li.innerHTML = (`
+    <p><strong>Nome:</strong> ${data[i].name}</p>
+    <p><strong>Linguagem:</strong> ${data[i].language}</p>
+    <p><strong>URL:</strong> <a href="${data[i].html_url}">${data[i].html_url}</a></p>
+`);
+      ul.appendChild(li);
+
 
     }
-    
-    // Send the request to the server
-    xhr.send();
-    
+  }
+  xhr.send();
+
 }
 
 
 function carregaPerfil() {
   abrePerfil();
   abreRepos();
-  let pesquisaUserBotao = document.getElementById("botao");
-  pesquisaUserBotao.addEventListener("click", pesquisaUser);
+  let pesquisaUserBotao = document.getElementById("submit");
+  pesquisaUserBotao.addEventListener("click", requestUser);
 }
 window.addEventListener("carrega", carregaPerfil);
